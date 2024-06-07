@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Что-то с чем-то</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                font-family: 'Comic Sans MS', Georgia, 'Times New Roman', Times, serif;
+                font-size: large;
+            }
+            .container {
+                background-color: aquamarine;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .container form > * {
+                display: block;
+                margin-top: 15px;
+            }
+            </style>
+    </head>
+    <body>
+        <div class="container">
+            <form>
+                <label for="header">Заголовок:</label>
+                <input id="header" type="text" maxlength="30">
+                <label for="description">Описание:</label>
+                <input id="description" type="text" maxlength="30">
+                <label for="creation">Время создания:</label>
+                <input id="creation" type="text" maxlength="30">
+                <label for="modification">Время изменения:</label>
+                <input id="modification" type="text" maxlength="30">
+                <label for="availability">Маркер выполнения:</label>
+                <input id="availability" type="text" maxlength="30">
+                <button type="submit" id="buttonSubmit">
+                    Добавить запись
+                </button>
+            </form>
+        </div>
+        <script src="LocalStorageOperator.js"></script>
+        <script defer>
+            const storageOperation = new LocalStorageOperator();
+            const $buttonSubmit = document.getElementById('buttonSubmit');
+            $buttonSubmit.addEventListener('click', e => {
+                e.preventDefault();
+                const data = [];
+                // document.quarySelectorAll('input').forEach(element => { 
+                    //     data.push(element.value);
+                    // });
+                    document.querySelectorAll('input').forEach(e => data.push(e.value));
+                    
+                    storageOperation.Push(data);
+                })
+        </script>
+    </body>
+</html>
