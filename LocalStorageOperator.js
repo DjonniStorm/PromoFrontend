@@ -2,7 +2,7 @@ class LocalStorageOperator {
     #counter;
     constructor() {
         //перед началом убираем всё лишнее
-        localStorage.clear();
+       // localStorage.clear();
         this.#counter = 0;
     }
     push(header, description, creation, modification, availability) {
@@ -21,9 +21,14 @@ class LocalStorageOperator {
         return dict;
     }
     getNote(index) {
-        if (index > 0 && index <= this.#counter) {
+        if (index >= 0 && index <= this.#counter) {
             return localStorage.getItem(index);
         }
         return null;
+    }
+    delNote(index) {
+        if (index >= 0 && index <= this.#counter) {
+            localStorage.removeItem(index);
+        }
     }
 }
