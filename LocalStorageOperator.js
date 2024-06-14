@@ -1,11 +1,29 @@
 class LocalStorageOperator {
-    constructor() {}
-    Push(header, description, creation, modification, availability) {
-        localStorage.setItem(header, description, creation, modification, availability);
+    #counter;
+    constructor() {
+        //перед началом убираем всё лишнее
+        localStorage.clear();
+        this.#counter = 0;
     }
-    Push(...args) {
+    push(header, description, creation, modification, availability) {
+        localStorage.setItem(this.#counter++, Array.from(header, description, creation, modification, availability));
+    }
+    push(...args) {
         try {
-            localStorage.setItem(args[0], args[1], args[2], args[3], args[4]);
+            localStorage.setItem(this.#counter++, args);
         } catch {}
+    }
+    getList() {
+        const dict = new Map();
+        for (let i = 0; i < this.#counter; i++) {
+            dict.set(i, localStorage.getItem(i));
+        }
+        return dict;
+    }
+    getNote(index) {
+        if (index > 0 && index <= this.#counter) {
+            return localStorage.getItem(index);
+        }
+        return null;
     }
 }

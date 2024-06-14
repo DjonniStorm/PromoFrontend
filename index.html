@@ -11,51 +11,238 @@
                 font-family: 'Comic Sans MS', Georgia, 'Times New Roman', Times, serif;
                 font-size: large;
             }
-            .container {
+            form > * {
+                display: block;
+                margin-top: 5px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
+            main {
+                flex-grow: 1;
                 background-color: aquamarine;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
             }
-            .container form > * {
-                display: block;
-                margin-top: 15px;
+            .none {
+                display: none !important;
+            }
+            button {
+                background-color: bisque;
+                padding: 10px;
+                width: 300px;
+                margin-top: 25px;
+            }
+            button:active {
+                box-shadow: 2px 2px black;
+            }
+            .center-display {
+                height: 70%;
+                width: 60%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex-grow: 1;
+            }
+            /* .center-display > input {
+                height: 5%;
+            } */
+            table, th, td {
+                border: 1px solid;
+            }
+            table {
+                width: 100%;
+            }
+            th, td {
+                padding: 20px;
+            }
+            input:focus {
+                background-color:rgba(4, 255, 234, 0.747);
             }
             </style>
     </head>
     <body>
-        <div class="container">
-            <form>
-                <label for="header">Заголовок:</label>
-                <input id="header" type="text" maxlength="30">
-                <label for="description">Описание:</label>
-                <input id="description" type="text" maxlength="30">
-                <label for="creation">Время создания:</label>
-                <input id="creation" type="text" maxlength="30">
-                <label for="modification">Время изменения:</label>
-                <input id="modification" type="text" maxlength="30">
+        <main>
+            <form class="center-display none">
+                <label for="header">Введите заголовок:</label>
+                <input id="header" type="text" maxlength="30" placeholder="Заголовок">
+                <label for="description">Опишите:</label>
+                <input id="description" type="text" maxlength="30"  placeholder="Описание">
+                <label for="creation">Введите время создания:</label>
+                <input id="creation" type="text" maxlength="30"  placeholder="Время создания">
+                <label for="modification">Введите время изменения:</label>
+                <input id="modification" type="text" maxlength="30" placeholder="Время изменения">
                 <label for="availability">Маркер выполнения:</label>
-                <input id="availability" type="text" maxlength="30">
+                <input id="availability" type="text" maxlength="30" placeholder="Маркер выполнения">
                 <button type="submit" id="buttonSubmit">
                     Добавить запись
                 </button>
             </form>
-        </div>
-        <script src="LocalStorageOperator.js"></script>
-        <script defer>
-            const storageOperation = new LocalStorageOperator();
-            const $buttonSubmit = document.getElementById('buttonSubmit');
-            $buttonSubmit.addEventListener('click', e => {
-                e.preventDefault();
-                const data = [];
-                // document.quarySelectorAll('input').forEach(element => { 
-                    //     data.push(element.value);
-                    // });
-                    document.querySelectorAll('input').forEach(e => data.push(e.value));
+            <div class="center-display">
+                <button id="buttonAdd">
+                    Добавить запись
+                </button>
+                <button id="buttonGetList">
+                    Получить список записей
+                </button>
+                <button id="buttonGetNote">
+                    Получить запись
+                </button>
+            </div>
+            <div class="center-display none">
+                <table id="dataTable" >
+                    <caption>
+                        Работа с LocalStorage
+                    </caption>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Значение</th>
+                    </tr>
+                    <tr id="remove">
+                        <td>Пусто</td>
+                        <td>Пусто :/</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="center-display none">
+                <label for="note">Введите номер записи:</label>
+                <input id="note" type="number" placeholder="Получить запись">
+                <button id="getNote">
+                    Получить!
+                </button>
+            </div>
+            <script src="LocalStorageOperator.js"></script>
+            <script defer>
+                //создание объекта класса-задания
+                const storageOperation = new LocalStorageOperator();
+                //активные, сменяющиеся div блоки
+                const $elems = document.querySelectorAll('.center-display');
+                const $table = document.getElementById('dataTable');
+                //кнопка для подтверждения на форме ввода новых данных
+                const $buttonSubmit = document.getElementById('buttonSubmit');
+                //кнопка добавления новой записи
+                const $buttonAdd = document.getElementById('buttonAdd');
+                //кнопка получения списка объектов
+                const $buttonGetList = document.getElementById('buttonGetList');
+                //кнопка перехода на страницу получения одного объекта
+                const $buttonGetNote = document.getElementById('buttonGetNote');
+                const $buttonGet = document.getElementById('getNote');
+                //обработчик нажания формы ввода новых данных
+                $buttonSubmit.addEventListener('click', e => {
+                    e.preventDefault();
+                    const data = [];
+                    //собираем все данные с input
+                    let input = document.querySelectorAll('input');
+                    let isInputHasEmptyField = false;
+                    input.forEach(x => {
+                        x.style.border = '';
+                        if (x === undefined || x == null || x.value == '' || x.value.trim() == '') {
+                            isInputHasEmptyField = true;
+                            x.style.border = '2px solid red';
+                        }
+                    })
+                    if (!isInputHasEmptyField) {
+                        input.forEach(e => data.push(e.value));
+                        storageOperation.push(data);
+                        makeNone(1);
+                    }
+                });
+                $buttonAdd.addEventListener('click', () => {
+                    makeNone(0);
+                });
+                $buttonGetList.addEventListener('click', () => {
+                    const dict = storageOperation.getList();
+                    if (dict.size > 0) {
+                        document.getElementById('remove').remove();
+                    }
+                    for (let i = 0; i < dict.size; i++) {
+                        let row = $table.insertRow();
+                        let cell1 = row.insertCell(0);
+                        let cell2 = row.insertCell(0);
+                        let text = dict.get(i);
+                        text = text.split(',').join('     ');
+                        cell1.innerHTML = text;
+                        cell2.innerHTML = i;
+                    }
+                    makeNone(2);
+                });
+                $buttonGetNote.addEventListener('click', () => {
+                    makeNone(3);
+                });
+                $buttonGet.addEventListener('click', () => {
+                    let note;
+                    let input = document.getElementById('note');
+                    input.style.border = "";
+                    if (input.value =='' && input.value.trim() == '') {
+                        input.style.border = '2px solid red';
+                        return;
+                    }
+                    if ((note = storageOperation.getNote(input.value)) !== null) {
+                        let tableResult = document.createElement('table');
+                        let row = tableResult.insertRow();
+                        let cell1 = row.insertCell(0);
+                        let cell2 = row.insertCell(0);
+                        $elems[3].append(tableResult);
+                    } else {
+                        if ($elems[3].contains(document.querySelector('div.center-display strong'))) {
+                                return;
+                        }
+                        let falseInput = document.createElement('strong');
+                        falseInput.innerText = 'Такой записи нет';
+                        document.getElementById('getNote').before(falseInput);
+                        falseInput.style.color = '#F00';
+                    }
+                });
+                function makeNone(number) {
+                    /*
                     
-                    storageOperation.Push(data);
-                })
-        </script>
+                    */
+                    if (number === 0) {
+                        for (let i = 0, length = $elems.length; i < length; i++) {
+                            $elems[i].classList.add('none');
+
+                        }
+                        $elems[number].classList.remove('none');
+                        return;
+                    }
+                    if (number === 1) {
+                        for (let i = 0, length = $elems.length; i < length; i++) {
+                            $elems[i].classList.add('none');
+
+                        }
+                        $elems[number].classList.remove('none');
+                        return;
+                    }
+                    if (number === 2) {
+                        for (let i = 0, length = $elems.length; i < length; i++) {
+                            $elems[i].classList.add('none');
+
+                        }
+                        $elems[number].classList.remove('none');
+                        return;
+                    }
+                    if (number === 3) {
+                        for (let i = 0, length = $elems.length; i < length; i++) {
+                            $elems[i].classList.add('none');
+
+                        }
+                        $elems[number].classList.remove('none');
+                        return;
+                    }
+                }
+            </script>
+        </main>
     </body>
 </html>
