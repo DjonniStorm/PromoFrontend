@@ -167,16 +167,17 @@
                 const $buttonChange = document.getElementById('buttonChange');
                 //кнопка удаления конкретной записи
                 const $buttonRemove = document.getElementById('buttonRemove');
+                let checker = -1;
                 //обработчик нажания формы ввода новых данных
                 $buttonSubmit.addEventListener('click', e => {
                     e.preventDefault();
-                    pushData(-1);
+                    pushData(checker);
                 });
                 function pushData(index) {
                     //собираем все данные с input
                     let input = document.querySelectorAll('form input');
                     let isInputHasEmptyField = false;
-                    
+                    console.log(index)
                     const data = [];
                     input.forEach(x => {
                         x.style.border = '';
@@ -191,8 +192,10 @@
                             storageOperation.push(data);
                         } else {
                             storageOperation.changeData(index, data);
+                            checker = 1;
                         }
                         makeNone(1);
+                        input.forEach(e => e.value = '');
                     }
                 }
                 $buttonAdd.addEventListener('click', () => {
@@ -205,7 +208,7 @@
                 document.getElementById('tableBack').addEventListener('click', () => {
                     let rows = document.querySelectorAll('#dataTable tr');
                     console.log(rows);
-                    for (let i = 0; i < rows.length; i++) {
+                    for (let i = 1; i < rows.length + 1; i++) {
                         $table.deleteRow(i - 1);
                     }
                     makeNone(1)
@@ -284,12 +287,21 @@
                     }
                 });
                 $buttonChange.addEventListener('click', () => {
-                    document.getElementById('tableResult').remove();
-                    makeNone(0);
-                    pushData(document.getElementById('note').value);
+                    try {
+                        document.getElementById('tableResult').remove();
+                    } catch(Exception) {}
+                    let am = document.getElementById('note').value;
+                    console.log(am)
+                    if (am !== undefined && am !== null && am != '') {
+                        checker = am;
+                        pushData(checker);
+                        makeNone(0);
+                    }
+                    makeNone(1);
                 });
                 $buttonRemove.addEventListener('click', () => {
-                    storageOperation.delNote(document.getElementById('note').value);
+                    inputValue = document.getElementById('note').value;
+                    storageOperation.delNote(inputValue ?? -1);
                     try {
                         document.getElementById('tableResult').remove();
                     } catch (Exception) {}
@@ -297,40 +309,19 @@
                 });
                 function makeNone(number) {
                     /*
-                    
+                        0 - форма ввода данных
+                        1 - меню
+                        2 - таблица записей
+                        3 - получение/изменение/удаление записи
                     */
-                    if (number === 0) {
-                        for (let i = 0, length = $elems.length; i < length; i++) {
-                            $elems[i].classList.add('none');
-
-                        }
-                        $elems[number].classList.remove('none');
-                        return;
-                    }
-                    if (number === 1) {
-                        for (let i = 0, length = $elems.length; i < length; i++) {
-                            $elems[i].classList.add('none');
-
-                        }
-                        $elems[number].classList.remove('none');
-                        return;
-                    }
-                    if (number === 2) {
-                        for (let i = 0, length = $elems.length; i < length; i++) {
-                            $elems[i].classList.add('none');
-
-                        }
-                        $elems[number].classList.remove('none');
-                        return;
-                    }
-                    if (number === 3) {
-                        for (let i = 0, length = $elems.length; i < length; i++) {
-                            $elems[i].classList.add('none');
-
-                        }
-                        $elems[number].classList.remove('none');
-                        return;
-                    }
+                   if (number >= 0 && number <= 3) {
+                       for (let i = 0, length = $elems.length; i < length; i++) {
+                           $elems[i].classList.add('none');
+    
+                       }
+                       $elems[number].classList.remove('none');
+                       return;
+                   }
                 }
             </script>
         </main>
