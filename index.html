@@ -258,7 +258,7 @@
                         console.log(storageOperation.getNote(input.value))
                         console.log(document.querySelector('div.center-display #tableResult'));
                         if ($elems[3].contains(document.querySelector('div.center-display #tableResult'))) {
-                            return;
+                            document.querySelector('div.center-display #tableResult').remove();
                         }
                         let tableResult = document.createElement('table');
                         let row = tableResult.insertRow();
