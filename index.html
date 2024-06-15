@@ -230,6 +230,7 @@
                         let cell4 = row.insertCell(0);
                         let cell5 = row.insertCell(0);
                         let text = dict.get(i);
+                        if (text === null) return;
                         let rowsOfData = text.split(',');
                         cell1.innerHTML = rowsOfData[4];
                         cell2.innerHTML = rowsOfData[3];
@@ -287,12 +288,12 @@
                     }
                 });
                 $buttonChange.addEventListener('click', () => {
+                    // debugger
                     try {
                         document.getElementById('tableResult').remove();
                     } catch(Exception) {}
                     let am = document.getElementById('note').value;
-                    console.log(am)
-                    if (am !== undefined && am !== null && am != '' && am.value >= 0) {
+                    if (am !== undefined && am !== null && am != '' && parseInt(am) >= 0) {
                         checker = am;
                         pushData(checker);
                         makeNone(0);
