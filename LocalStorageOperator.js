@@ -2,7 +2,7 @@ class LocalStorageOperator {
     #counter;
     constructor() {
         //перед началом убираем всё лишнее
-       // localStorage.clear();
+        localStorage.clear();
         this.#counter = 0;
     }
     push(header, description, creation, modification, availability) {
