@@ -208,7 +208,7 @@
                 document.getElementById('tableBack').addEventListener('click', () => {
                     let rows = document.querySelectorAll('#dataTable tr');
                     console.log(rows);
-                    for (let i = 1; i < rows.length + 1; i++) {
+                    for (let i = rows.length - 1; i >= 0; i--) {
                         $table.deleteRow(i - 1);
                     }
                     makeNone(1)
@@ -292,10 +292,11 @@
                     } catch(Exception) {}
                     let am = document.getElementById('note').value;
                     console.log(am)
-                    if (am !== undefined && am !== null && am != '') {
+                    if (am !== undefined && am !== null && am != '' && am.value >= 0) {
                         checker = am;
                         pushData(checker);
                         makeNone(0);
+                        return;
                     }
                     makeNone(1);
                 });
