@@ -13,6 +13,12 @@ class LocalStorageOperator {
             localStorage.setItem(this.#counter++, args);
         } catch {}
     }
+    changeData(index, ...args) {
+        if (index < 0 || index > this.#counter) return;
+        try {
+            localStorage.setItem(index, args);
+        } catch {}
+    }
     getList() {
         const dict = new Map();
         for (let i = 0; i < this.#counter; i++) {

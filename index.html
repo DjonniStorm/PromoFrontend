@@ -140,6 +140,12 @@
                 <button id="getBack">
                     Назад
                 </button>
+                <button id="buttonRemove">
+                    Удалить
+                </button>
+                <button id="buttonChange">
+                    Изменить
+                </button>
             </div>
             <script src="LocalStorageOperator.js"></script>
             <script defer>
@@ -157,13 +163,21 @@
                 //кнопка перехода на страницу получения одного объекта
                 const $buttonGetNote = document.getElementById('buttonGetNote');
                 const $buttonGet = document.getElementById('getNote');
+                //
+                const $buttonChange = document.getElementById('buttonChange');
+                //
+                const $buttonRemove = document.getElementById('buttonRemove');
                 //обработчик нажания формы ввода новых данных
                 $buttonSubmit.addEventListener('click', e => {
                     e.preventDefault();
-                    const data = [];
+                    pushData(-1);
+                });
+                function pushData(index) {
                     //собираем все данные с input
                     let input = document.querySelectorAll('form input');
                     let isInputHasEmptyField = false;
+                    
+                    const data = [];
                     input.forEach(x => {
                         x.style.border = '';
                         if (x === undefined || x == null || x.value == '' || x.value.trim() == '') {
@@ -173,10 +187,14 @@
                     })
                     if (!isInputHasEmptyField) {
                         input.forEach(e => data.push(e.value));
-                        storageOperation.push(data);
+                        if (index === -1) {
+                            storageOperation.push(data);
+                        } else {
+                            storageOperation.changeData(index, data);
+                        }
                         makeNone(1);
                     }
-                });
+                }
                 $buttonAdd.addEventListener('click', () => {
                     makeNone(0);
                 });
@@ -184,12 +202,22 @@
                     e.preventDefault();
                     makeNone(1);
                 });
-                document.getElementById('tableBack').addEventListener('click', () => makeNone(1));
+                document.getElementById('tableBack').addEventListener('click', () => {
+                    let rows = document.querySelectorAll('#dataTable tr');
+                    console.log(rows);
+                    for (let i = 0; i < rows.length; i++) {
+                        $table.deleteRow(i - 1);
+                    }
+                    makeNone(1)
+                });
                 document.getElementById('getBack').addEventListener('click', () => makeNone(1));
                 $buttonGetList.addEventListener('click', () => {
                     const dict = storageOperation.getList();
                     if (dict.size > 0) {
-                        document.getElementById('remove').remove();
+                        try {
+                            document.getElementById('remove').remove();
+                        }
+                        catch (Exception) {}
                     }
                     for (let i = 0; i < dict.size; i++) {
                         let row = $table.insertRow();
@@ -219,7 +247,11 @@
                         input.style.border = '2px solid red';
                         return;
                     }
+                    try {
+                        document.querySelector('div.center-display strong').remove();
+                    } catch(Exception) {}
                     if ((note = storageOperation.getNote(input.value)) !== null) {
+                        console.log(storageOperation.getNote(input.value))
                         console.log(document.querySelector('div.center-display #tableResult'));
                         if ($elems[3].contains(document.querySelector('div.center-display #tableResult'))) {
                             return;
@@ -234,37 +266,14 @@
                         let rowsOfData = note.split(',');
                         console.log(rowsOfData);
                         tableResult.setAttribute("id", "tableResult");
-                        $elems[3].append(tableResult);
+                        $elems[3].prepend(tableResult);
                         cell1.innerHTML = rowsOfData[4];
                         cell2.innerHTML = rowsOfData[3];
                         cell3.innerHTML = rowsOfData[2];
                         cell4.innerHTML = rowsOfData[1];
                         cell5.innerHTML = rowsOfData[0];
-                        $buttonGet.remove();
-                        //кнопочки
-                        let buttonChange = document.createElement('button');
-                        buttonChange.innerHTML = 'Изменить';
-                        buttonChange.setAttribute("id", "buttonChange");
-                        let buttonRemove = document.createElement('button');
-                        buttonRemove.innerHTML = 'Удалить';
-                        buttonRemove.setAttribute("id", "buttonRemove");
-                        $elems[3].append(buttonChange);
-                        $elems[3].append(buttonRemove);
-
-                        buttonChange.addEventListener('click', () => {
-                            tableResult.remove();
-                            buttonChange.remove();
-                            buttonRemove.remove();
-                            makeNone(1);
-                        });
-                        buttonRemove.addEventListener('click', () => {
-                            storageOperation.delNote(input.value);
-                            tableResult.remove();
-                            buttonChange.remove();
-                            buttonRemove.remove();
-                            makeNone(1);
-                        });
                     } else {
+                        console.log(document.querySelector('div.center-display strong'))
                         if ($elems[3].contains(document.querySelector('div.center-display strong'))) {
                             return;
                         }
@@ -273,6 +282,18 @@
                         document.getElementById('getNote').before(falseInput);
                         falseInput.style.color = '#F00';
                     }
+                });
+                $buttonChange.addEventListener('click', () => {
+                    document.getElementById('tableResult').remove();
+                    makeNone(0);
+                    pushData(document.getElementById('note').value);
+                });
+                $buttonRemove.addEventListener('click', () => {
+                    storageOperation.delNote(document.getElementById('note').value);
+                    try {
+                        document.getElementById('tableResult').remove();
+                    } catch (Exception) {}
+                    makeNone(1);
                 });
                 function makeNone(number) {
                     /*
