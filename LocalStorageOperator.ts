@@ -1,5 +1,5 @@
 class LocalStorageOperator {
-    #counter;
+    private counter: number;
     /**
      * Конструктор
      * Очищает localStorage 
@@ -8,15 +8,16 @@ class LocalStorageOperator {
     constructor() {
         //перед началом убираем всё лишнее
         localStorage.clear();
-        this.#counter = 0;
+        this.counter = 0;
     }
     /**
      * Добавление записи в конец
      * @param  {...any} args данные
      */
-    push(...args) {
+    push(...args: any) {
         try {
-            localStorage.setItem(this.#counter++, args);
+            localStorage.setItem(this.counter.toString(), args);
+            this.counter++;
         } catch {}
     }
     /**
@@ -25,10 +26,10 @@ class LocalStorageOperator {
      * @param  {...any} args данные
      * @returns 
      */
-    changeData(index, ...args) {
-        if (index < 0 || index > this.#counter) return;
+    changeData(index: number, ...args: any) {
+        if (index < 0 || index > this.counter) return;
         try {
-            localStorage.setItem(index, args);
+            localStorage.setItem(index.toString(), args);
         } catch {}
     }
     /**
@@ -37,8 +38,8 @@ class LocalStorageOperator {
      */
     getList() {
         const dict = new Map();
-        for (let i = 0; i < this.#counter; i++) {
-            dict.set(i, localStorage.getItem(i));
+        for (let i = 0; i < this.counter; i++) {
+            dict.set(i, localStorage.getItem(i.toString()));
         }
         return dict;
     }
@@ -47,9 +48,9 @@ class LocalStorageOperator {
      * @param {Int32} index индекс, по которому берётся значение 
      * @returns объект из localStorage или null, если такого нет
      */
-    getNote(index) {
-        if (index >= 0 && index <= this.#counter) {
-            return localStorage.getItem(index);
+    getNote(index: number) {
+        if (index >= 0 && index <= this.counter) {
+            return localStorage.getItem(index.toString());
         }
         return null;
     }
@@ -57,9 +58,9 @@ class LocalStorageOperator {
      * Удаление объекта
      * @param {Int32} index индекс, по которому удаляем 
      */
-    delNote(index) {
-        if (index >= 0 && index <= this.#counter) {
-            localStorage.removeItem(index);
+    delNote(index: number) {
+        if (index >= 0 && index <= this.counter) {
+            localStorage.removeItem(index.toString());
         }
     }
 }
