@@ -1,3 +1,6 @@
+interface LocalData {
+    [key: string] : string;
+};
 class LocalStorageOperator {
     private counter: number;
     /**
@@ -14,16 +17,9 @@ class LocalStorageOperator {
      * Добавление записи в конец
      * @param  {data} данные
      */
-    push(data : {
-        header: string,
-        description: string,
-        creation: string,
-        modification: string,
-        availability: string
-    }) : void {
-        let args: string = `${data.header} ${data.description} ${data.creation} ${data.modification}  ${data.availability}`;
+    push(args : LocalData) : void {
         try {
-            localStorage.setItem(this.counter.toString(), args);
+            localStorage.setItem(this.counter.toString(), `${args.header} ${args.description} ${args.creation} ${args.modification} ${args.availability}`);
             this.counter++;
         } catch {}
     }
@@ -33,15 +29,9 @@ class LocalStorageOperator {
      * @param  {...any} args данные
      * @returns 
      */
-    changeData(index: number, data : {
-        header: string,
-        description: string,
-        creation: string,
-        modification: string,
-        availability: string
-    }) : void {
+    changeData(index: number, {header, description, creation, modification, availability} : LocalData) : void {
         if (index < 0 || index > this.counter) return;
-        let args: string = `${data.header} ${data.description} ${data.creation} ${data.modification}  ${data.availability}`;
+        let args: string = `${header} ${description} ${creation} ${modification}  ${availability}`;
         try {
             localStorage.setItem(index.toString(), args);
         } catch {}
@@ -50,12 +40,14 @@ class LocalStorageOperator {
      * Получение списка объектов
      * @returns список объектов в localStorage
      */
-    getList() : Map<number, string> {
-        const dict = new Map();
+    getList() : string[] {
+        let array: string[] = [];
         for (let i = 0; i < this.counter; i++) {
-            dict.set(i, localStorage.getItem(i.toString()));
+            let a = localStorage.getItem(i.toString());
+            if (a !== null)
+                array.push(a);
         }
-        return dict;
+        return array;
     }
     /**
      * Получение одного объекта
