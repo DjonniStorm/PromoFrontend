@@ -1,5 +1,4 @@
-import { LocalData } from "./LocalStorageOperator";
-import { LocalStorageOperator } from "./LocalStorageOperator";
+import LocalStorageOperator from "./LocalStorageOperator";
 
 //создание объекта класса-задания
 const storageOperation = new LocalStorageOperator();
@@ -38,16 +37,8 @@ function pushData(index: number) {
         }
     })
     if (!isInputHasEmptyField) {
-        let d: string[];
-        input.forEach(x => d.push(x.value));
-        const data: LocalData = {
-            a: d![0],
-            b: d![1],
-            c: d![2],
-            d: d![3],
-            e: d![4],
-        }
-        //input.forEach(e => data.push(e.value));
+        let data: string = "";
+        input.forEach(x => data += `${x.value}, `);
         if (index === -1) {
             storageOperation.push(data);
         } else {
@@ -77,23 +68,23 @@ document.getElementById('tableBack')?.addEventListener('click', () => {
 });
 document.getElementById('getBack')?.addEventListener('click', () => makeNone(1));
 $buttonGetList?.addEventListener('click', () => {
-    const dict = storageOperation.getList();
-    if (dict.size > 0) {
+    const dict: string[] = storageOperation.getList();
+    if (dict.length > 0) {
         try {
             document.getElementById('remove')?.remove();
         }
         catch (Exception) {}
     }
-    for (let i = 0; i < dict.size; i++) {
+    for (let i = 0; i < dict.length; i++) {
         let row: HTMLTableRowElement = $table?.insertRow();
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(0);
         let cell3 = row.insertCell(0);
         let cell4 = row.insertCell(0);
         let cell5 = row.insertCell(0);
-        let text = dict.get(i);
+        let text = dict[i];
         if (text === null || text === undefined) return;
-        let rowsOfData = text.split(',');
+        let rowsOfData: string[] = text.split(',');
         cell1.innerHTML = rowsOfData[4];
         cell2.innerHTML = rowsOfData[3];
         cell3.innerHTML = rowsOfData[2];

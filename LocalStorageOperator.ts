@@ -1,7 +1,4 @@
-export interface LocalData {
-    [key: string] : string;
-};
-export class LocalStorageOperator {
+class LocalStorageOperator {
     private counter: number;
     /**
      * Конструктор
@@ -17,37 +14,34 @@ export class LocalStorageOperator {
      * Добавление записи в конец
      * @param  {data} данные
      */
-    push(args : LocalData) : void {
+    push(data: string) : void {
         try {
-            localStorage.setItem(this.counter.toString(), `${args.header} ${args.description} ${args.creation} ${args.modification} ${args.availability}`);
+            localStorage.setItem(this.counter.toString(), data);
             this.counter++;
         } catch {}
     }
     /**
      * 
      * @param {Int32} index индекс, по которому меняются значения 
-     * @param  {...any} args данные
+     * @param  {...any} data данные
      * @returns 
      */
-    changeData(index: number, {header, description, creation, modification, availability} : LocalData) : void {
+    changeData(index: number, data: string) : void {
         if (index < 0 || index > this.counter) return;
-        let args: string = `${header} ${description} ${creation} ${modification}  ${availability}`;
         try {
-            localStorage.setItem(index.toString(), args);
+            localStorage.setItem(index.toString(), data);
         } catch {}
     }
     /**
      * Получение списка объектов
      * @returns список объектов в localStorage
      */
-    getList() : Map<number, string> {
-        let dict: Map<number, string> = new Map();
-        let checker: number = 0;
+    getList() : string[] {
+        let dict: string[] = [];
         for (let i = 0; i < this.counter; i++) {
             let a = localStorage.getItem(i.toString());
             if (a !== null) {
-                dict.set(checker, a);
-                checker++;
+                dict.push(a);
             }
         }
         return dict;
@@ -73,3 +67,5 @@ export class LocalStorageOperator {
         }
     }
 }
+
+export default LocalStorageOperator;

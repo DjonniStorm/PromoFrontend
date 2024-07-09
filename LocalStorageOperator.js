@@ -1,78 +1,65 @@
-"use strict";
-var LocalStorageOperator = /** @class */ (function () {
+class LocalStorageOperator {
+    #counter;
     /**
      * Конструктор
-     * Очищает localStorage
-     * Задаёт значение счётчику добавленных объектов
+     * Очищает localStorage 
+     * Задаёт значение счётчику добавленных объектов 
      */
-    function LocalStorageOperator() {
+    constructor() {
         //перед началом убираем всё лишнее
         localStorage.clear();
-        this.counter = 0;
+        this.#counter = 0;
     }
     /**
      * Добавление записи в конец
-     * @param  {data} данные
-     */
-    LocalStorageOperator.prototype.push = function (args) {
-        try {
-            localStorage.setItem(this.counter.toString(), "".concat(args.header, " ").concat(args.description, " ").concat(args.creation, " ").concat(args.modification, " ").concat(args.availability));
-            this.counter++;
-        }
-        catch (_a) { }
-    };
-    /**
-     *
-     * @param {Int32} index индекс, по которому меняются значения
      * @param  {...any} args данные
-     * @returns
      */
-    LocalStorageOperator.prototype.changeData = function (index, _a) {
-        var header = _a.header, description = _a.description, creation = _a.creation, modification = _a.modification, availability = _a.availability;
-        if (index < 0 || index > this.counter)
-            return;
-        var args = "".concat(header, " ").concat(description, " ").concat(creation, " ").concat(modification, "  ").concat(availability);
+    push(...args) {
         try {
-            localStorage.setItem(index.toString(), args);
-        }
-        catch (_b) { }
-    };
+            localStorage.setItem(this.#counter++, args);
+        } catch {}
+    }
+    /**
+     * 
+     * @param {Int32} index индекс, по которому меняются значения 
+     * @param  {...any} args данные
+     * @returns 
+     */
+    changeData(index, ...args) {
+        if (index < 0 || index > this.#counter) return;
+        try {
+            localStorage.setItem(index, args);
+        } catch {}
+    }
     /**
      * Получение списка объектов
      * @returns список объектов в localStorage
      */
-    LocalStorageOperator.prototype.getList = function () {
-        var dict = new Map();
-        var checker = 0;
-        for (var i = 0; i < this.counter; i++) {
-            var a = localStorage.getItem(i.toString());
-            if (a !== null) {
-                dict.set(checker, a);
-                checker++;
-            }
+    getList() {
+        const dict = new Map();
+        for (let i = 0; i < this.#counter; i++) {
+            dict.set(i, localStorage.getItem(i));
         }
         return dict;
-    };
+    }
     /**
      * Получение одного объекта
-     * @param {Int32} index индекс, по которому берётся значение
+     * @param {Int32} index индекс, по которому берётся значение 
      * @returns объект из localStorage или null, если такого нет
      */
-    LocalStorageOperator.prototype.getNote = function (index) {
-        if (index >= 0 && index <= this.counter) {
-            return localStorage.getItem(index.toString());
+    getNote(index) {
+        if (index >= 0 && index <= this.#counter) {
+            return localStorage.getItem(index);
         }
         return null;
-    };
+    }
     /**
      * Удаление объекта
-     * @param {Int32} index индекс, по которому удаляем
+     * @param {Int32} index индекс, по которому удаляем 
      */
-    LocalStorageOperator.prototype.delNote = function (index) {
-        if (index >= 0 && index <= this.counter) {
-            localStorage.removeItem(index.toString());
+    delNote(index) {
+        if (index >= 0 && index <= this.#counter) {
+            localStorage.removeItem(index);
         }
-    };
-    return LocalStorageOperator;
-}());
-exports.LocalStorageOperator = LocalStorageOperator;
+    }
+}
