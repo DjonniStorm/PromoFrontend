@@ -1,7 +1,7 @@
-interface LocalData {
+export interface LocalData {
     [key: string] : string;
 };
-class LocalStorageOperator {
+export class LocalStorageOperator {
     private counter: number;
     /**
      * Конструктор
@@ -36,18 +36,26 @@ class LocalStorageOperator {
             localStorage.setItem(index.toString(), args);
         } catch {}
     }
+    change() : Map<number, string> {
+        let a = new Map<number, string>();
+        a.set(1, "");
+        return a;
+    }
     /**
      * Получение списка объектов
      * @returns список объектов в localStorage
      */
-    getList() : string[] {
-        let array: string[] = [];
+    getList() : Map<number, string> {
+        let dict: Map<number, string> = new Map<number, string>();
+        let checker: number = 0;
         for (let i = 0; i < this.counter; i++) {
             let a = localStorage.getItem(i.toString());
-            if (a !== null)
-                array.push(a);
+            if (a !== null) {
+                dict.set(checker, a);
+                checker++;
+            }
         }
-        return array;
+        return dict;
     }
     /**
      * Получение одного объекта

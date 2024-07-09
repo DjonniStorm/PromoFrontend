@@ -1,33 +1,35 @@
+import { LocalData } from "./LocalStorageOperator";
+import { LocalStorageOperator } from "./LocalStorageOperator";
+
 //создание объекта класса-задания
 const storageOperation = new LocalStorageOperator();
 //активные, сменяющиеся div блоки
-const $elems = document.querySelectorAll('.center-display');
-const $table = document.getElementById('dataTable');
+const $elems = document.querySelectorAll('.center-display') as NodeListOf<HTMLDivElement>;
+const $table = document.getElementById('dataTable') as HTMLTableElement;
 //кнопка для подтверждения на форме ввода новых данных
-const $buttonSubmit = document.getElementById('buttonSubmit');
+const $buttonSubmit = document.getElementById('buttonSubmit') as HTMLButtonElement;
 //кнопка добавления новой записи
-const $buttonAdd = document.getElementById('buttonAdd');
+const $buttonAdd = document.getElementById('buttonAdd') as HTMLButtonElement;
 //кнопка получения списка объектов
-const $buttonGetList = document.getElementById('buttonGetList');
+const $buttonGetList = document.getElementById('buttonGetList') as HTMLButtonElement;
 //кнопка перехода на страницу получения одного объекта
-const $buttonGetNote = document.getElementById('buttonGetNote');
-const $buttonGet = document.getElementById('getNote');
+const $buttonGetNote = document.getElementById('buttonGetNote') as HTMLButtonElement;
+const $buttonGet = document.getElementById('getNote') as HTMLButtonElement;
 //кнопока изменения на страницы одной записи
-const $buttonChange = document.getElementById('buttonChange');
+const $buttonChange = document.getElementById('buttonChange') as HTMLButtonElement;
 //кнопка удаления конкретной записи
-const $buttonRemove = document.getElementById('buttonRemove');
-let checker = -1;
+const $buttonRemove = document.getElementById('buttonRemove') as HTMLButtonElement;
+let checker: number = -1;
 //обработчик нажания формы ввода новых данных
 $buttonSubmit?.addEventListener('click', e => {
     e.preventDefault();
     pushData(checker);
 });
-function pushData(index) {
+function pushData(index: number) {
     //собираем все данные с input
-    let input = document.querySelectorAll('form input');
+    let input = document.querySelectorAll('form input') as NodeListOf<HTMLInputElement>;
     let isInputHasEmptyField = false;
     console.log(index)
-    const data = [];
     input.forEach(x => {
         x.style.border = '';
         if (x === undefined || x == null || x.value == '' || x.value.trim() == '') {
@@ -36,7 +38,16 @@ function pushData(index) {
         }
     })
     if (!isInputHasEmptyField) {
-        input.forEach(e => data.push(e.value));
+        let d: string[];
+        input.forEach(x => d.push(x.value));
+        const data: LocalData = {
+            a: d![0],
+            b: d![1],
+            c: d![2],
+            d: d![3],
+            e: d![4],
+        }
+        //input.forEach(e => data.push(e.value));
         if (index === -1) {
             storageOperation.push(data);
         } else {
@@ -47,39 +58,41 @@ function pushData(index) {
         input.forEach(e => e.value = '');
     }
 }
-$buttonAdd.addEventListener('click', () => {
+$buttonAdd?.addEventListener('click', () => {
     makeNone(0);
 });
-document.getElementById('addBack').addEventListener('click', e => {
+document.getElementById('addBack')?.addEventListener('click', e => {
     e.preventDefault();
     makeNone(1);
 });
-document.getElementById('tableBack').addEventListener('click', () => {
-    let rows = document.querySelectorAll('#dataTable tr');
+document.getElementById('tableBack')?.addEventListener('click', () => {
+    let rows: NodeListOf<HTMLTableRowElement> = document.querySelectorAll('#dataTable tr') as NodeListOf<HTMLTableRowElement>;
     console.log(rows);
-    for (let i = rows.length - 1; i >= 0; i--) {
-        $table.deleteRow(i - 1);
+    if (rows !== null && $table !== null) {
+        for (let i = rows.length - 1; i >= 0; i--) {
+            $table.deleteRow(i - 1);
+        }
+        makeNone(1);
     }
-    makeNone(1)
 });
-document.getElementById('getBack').addEventListener('click', () => makeNone(1));
-$buttonGetList.addEventListener('click', () => {
+document.getElementById('getBack')?.addEventListener('click', () => makeNone(1));
+$buttonGetList?.addEventListener('click', () => {
     const dict = storageOperation.getList();
     if (dict.size > 0) {
         try {
-            document.getElementById('remove').remove();
+            document.getElementById('remove')?.remove();
         }
         catch (Exception) {}
     }
     for (let i = 0; i < dict.size; i++) {
-        let row = $table.insertRow();
+        let row: HTMLTableRowElement = $table?.insertRow();
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(0);
         let cell3 = row.insertCell(0);
         let cell4 = row.insertCell(0);
         let cell5 = row.insertCell(0);
         let text = dict.get(i);
-        if (text === null) return;
+        if (text === null || text === undefined) return;
         let rowsOfData = text.split(',');
         cell1.innerHTML = rowsOfData[4];
         cell2.innerHTML = rowsOfData[3];
@@ -89,25 +102,25 @@ $buttonGetList.addEventListener('click', () => {
     }
     makeNone(2);
 });
-$buttonGetNote.addEventListener('click', () => {
+$buttonGetNote?.addEventListener('click', () => {
     makeNone(3);
 });
-$buttonGet.addEventListener('click', () => {
+$buttonGet?.addEventListener('click', () => {
     var note;
-    let input = document.getElementById('note');
+    let input = document?.getElementById('note') as HTMLInputElement;
     input.style.border = "";
     if (input.value =='' && input.value.trim() == '') {
         input.style.border = '2px solid red';
         return;
     }
     try {
-        document.querySelector('div.center-display strong').remove();
+        document.querySelector('div.center-display strong')?.remove();
     } catch(Exception) {}
-    if ((note = storageOperation.getNote(input.value)) !== null) {
-        console.log(storageOperation.getNote(input.value))
+    if ((note = storageOperation.getNote(+input.value)) !== null) {
+        console.log(storageOperation.getNote(+input.value))
         console.log(document.querySelector('div.center-display #tableResult'));
         if ($elems[3].contains(document.querySelector('div.center-display #tableResult'))) {
-            document.querySelector('div.center-display #tableResult').remove();
+            document.querySelector('div.center-display #tableResult')?.remove();
         }
         let tableResult = document.createElement('table');
         let row = tableResult.insertRow();
@@ -132,18 +145,18 @@ $buttonGet.addEventListener('click', () => {
         }
         let falseInput = document.createElement('strong');
         falseInput.innerHTML = 'Такой записи нет';
-        document.getElementById('getNote').before(falseInput);
+        document.getElementById('getNote')?.before(falseInput);
         falseInput.style.color = '#F00';
     }
 });
-$buttonChange.addEventListener('click', () => {
+$buttonChange?.addEventListener('click', () => {
     // debugger
     try {
-        document.getElementById('tableResult').remove();
+        document.getElementById('tableResult')?.remove();
     } catch(Exception) {}
-    let am = document.getElementById('note').value;
+    let am = (document.getElementById('note') as HTMLInputElement).value;
     if (am !== undefined && am !== null && am != '' && parseInt(am) >= 0) {
-        checker = am;
+        checker = +am;
         pushData(checker);
         makeNone(0);
         return;
@@ -151,10 +164,10 @@ $buttonChange.addEventListener('click', () => {
     makeNone(1);
 });
 $buttonRemove?.addEventListener('click', () => {
-    inputValue = document.getElementById('note').value;
-    storageOperation.delNote(inputValue ?? -1);
+    let inputValue = (document.getElementById('note') as HTMLInputElement).value;
+    storageOperation.delNote(+inputValue ?? -1);
     try {
-        document.getElementById('tableResult').remove();
+        document.getElementById('tableResult')?.remove();
     } catch (Exception) {}
     makeNone(1);
 });
