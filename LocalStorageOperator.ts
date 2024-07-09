@@ -36,17 +36,12 @@ export class LocalStorageOperator {
             localStorage.setItem(index.toString(), args);
         } catch {}
     }
-    change() : Map<number, string> {
-        let a = new Map<number, string>();
-        a.set(1, "");
-        return a;
-    }
     /**
      * Получение списка объектов
      * @returns список объектов в localStorage
      */
     getList() : Map<number, string> {
-        let dict: Map<number, string> = new Map<number, string>();
+        let dict: Map<number, string> = new Map();
         let checker: number = 0;
         for (let i = 0; i < this.counter; i++) {
             let a = localStorage.getItem(i.toString());
