@@ -1,84 +1,13 @@
-<!DOCTYPE html>
-<html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Что-то с чем-то</title>
-        <link rel="stylesheet" href="./style.css">
-    </head>
-    <body>
-        <main>
-            <form class="center-display none">
-                <label for="header">Введите заголовок:</label>
-                <input id="header" type="text" maxlength="30" placeholder="Заголовок">
-                <label for="description">Опишите:</label>
-                <input id="description" type="text" maxlength="30"  placeholder="Описание">
-                <label for="creation">Введите время создания:</label>
-                <input id="creation" type="datetime-local" maxlength="30"  placeholder="Время создания">
-                <label for="modification">Введите время изменения:</label>
-                <input id="modification" type="datetime-local" maxlength="30" placeholder="Время изменения">
-                <label for="availability">Маркер выполнения:</label>
-                <input id="availability" type="text" maxlength="30" placeholder="Маркер выполнения">
-                <button type="submit" id="buttonSubmit">
-                    Добавить запись
-                </button>
-                <button id="addBack">
-                    Назад
-                </button>
-            </form>
-            <div class="center-display">
-                <button id="buttonAdd">
-                    Добавить запись
-                </button>
-                <button id="buttonGetList">
-                    Получить список записей
-                </button>
-                <button id="buttonGetNote">
-                    Получить/Изменить/Удалить запись
-                </button>
-            </div>
-            <div class="center-display none">
-                <table id="dataTable" >
-                    <caption>
-                        Работа с LocalStorage
-                    </caption>
-                    <tr>
-                        <th>Заголовок</th>
-                        <th>Описание</th>
-                        <th>Время создания</th>
-                        <th>Время изменения</th>
-                        <th>Маркер выполнения</th>
-                    </tr>
-                    <tr id="remove">
-                        <td>Пусто</td>
-                        <td>Пусто :/</td>
-                        <td>Пусто :/</td>
-                        <td>Пусто :/</td>
-                        <td>Пусто :/</td>
-                    </tr>
-                    <button id="tableBack">
-                        Назад
-                    </button>
-                </table>
-            </div>
-            <div class="center-display none">
-                <label for="note">Введите номер записи:</label>
-                <input id="note" type="number" placeholder="Получить запись">
-                <button id="getNote">
-                    Получить!
-                </button>
-                <button id="getBack">
-                    Назад
-                </button>
-                <button id="buttonRemove">
-                    Удалить
-                </button>
-                <button id="buttonChange">
-                    Изменить
-                </button>
-            </div>
-            <script src="LocalStorageOperator.js" defer></script>
-            <script src="index.js" defer></script>
-        </main>
-    </body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Что-то с чем-то</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
