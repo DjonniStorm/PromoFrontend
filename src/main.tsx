@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import MainPanel from './layout/Main/MainPanel'
 import ErrorElem from './layout/Error/Error'
 import Add from './layout/Add/Add'
+import All from './layout/All/All'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     element: <Add />
   }, {
     path: '/all',
-    element: <>123</>
+    element: <All/>
   }
   
 ]);

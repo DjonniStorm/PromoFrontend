@@ -3,13 +3,12 @@ import style from './Button.module.css';
 import cn from "classnames";
 interface ButtonProps {
     children: ReactNode;
-    onClick?: () => void;
 };
 
-function Button({children, onClick} : ButtonProps) {
+function Button({children} : ButtonProps) {
     return (
         <>
-            <button className={cn(style['button'])} onClick={() => onClick()}>
+            <button className={cn(style['button'])}>
                 {children}
             </button>
         </>

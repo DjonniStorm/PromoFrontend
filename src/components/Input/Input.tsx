@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import style from './Input.module.css';
 import cn from 'classnames';
 interface InputProps {
@@ -6,13 +7,13 @@ interface InputProps {
     labelText: string;
     id: string;
 };
-function Input({placeholder, type, labelText, id}: InputProps) {
+const Input = forwardRef<HTMLInputElement, InputProps>(({placeholder, type, labelText, id}: InputProps, ref) => {
     return (
         <div className={cn(style['input'])}>
             <label htmlFor={id}>{labelText}</label>
-            <input id={id} type={type} placeholder={placeholder ?? ''}/>
+            <input ref={ref} id={id} type={type} placeholder={placeholder ?? ''}/>
         </div>
     );
-}
+});
 
 export default Input;
