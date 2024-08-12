@@ -5,7 +5,7 @@ import style from "./Add.module.css";
 import { FormEvent, useRef } from "react";
 import { TableData } from "../../interfaces/DataObject";
 import {KEY} from '../../helpers/LocalStorageKey';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function Add() {
     const navigate = useNavigate();
     const redirect = () => {

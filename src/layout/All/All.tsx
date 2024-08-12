@@ -9,8 +9,7 @@ import { useNavigate } from "react-router-dom";
 function All() {
     const [ tableData, setTableData ] = useState<TableData[]>();
     const navigate = useNavigate();
-    const redirect = (e) => {
-        console.log('тут');
+    const redirect = () => {
         navigate('/');
     };
     useEffect(
