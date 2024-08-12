@@ -1,0 +1,9 @@
+.test {
+    border: 2px solid black;
+}
+
+.test > * {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px dashed black;
+}

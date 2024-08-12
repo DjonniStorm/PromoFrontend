@@ -1,14 +1,14 @@
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 import style from './Button.module.css';
 import cn from "classnames";
-interface ButtonProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     children: ReactNode;
 };
 
-function Button({children} : ButtonProps) {
+function Button({children, onClick} : ButtonProps) {
     return (
         <>
-            <button className={cn(style['button'])}>
+            <button onClick={onClick} className={cn(style['button'])}>
                 {children}
             </button>
         </>
